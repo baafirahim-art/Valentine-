@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BE MY VALENTINE ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine ❤️</title>
 
 <style>
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
   height: 100vh;
@@ -16,51 +19,76 @@ body {
   overflow: hidden;
 }
 
-/* Floating hearts */
-.heart {
+/* Shake effect */
+.shake {
+  animation: shake 0.4s;
+}
+@keyframes shake {
+  0% { transform: translate(0); }
+  25% { transform: translate(-5px, 5px); }
+  50% { transform: translate(5px, -5px); }
+  75% { transform: translate(-5px, -5px); }
+  100% { transform: translate(0); }
+}
+
+/* Floating hearts & ribbons */
+.float {
   position: fixed;
-  bottom: -10px;
-  font-size: 20px;
+  bottom: -20px;
   animation: floatUp linear infinite;
-  opacity: 0.8;
+  opacity: 0.9;
 }
-
 @keyframes floatUp {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-110vh); opacity: 0; }
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-120vh); opacity: 0; }
 }
 
-/* Main box */
+/* Rose petals */
+.petal {
+  position: fixed;
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle, #ff2d55, #b3002d);
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(45deg);
+  animation: petalFall 4s linear forwards;
+}
+@keyframes petalFall {
+  from { transform: translateY(-10vh) rotate(0deg); }
+  to { transform: translateY(120vh) rotate(720deg); }
+}
+
+/* Card */
 .container {
   background: white;
-  padding: 35px 40px 40px;
+  padding: 30px;
   border-radius: 25px;
   text-align: center;
   box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-  max-width: 90%;
+  width: min(90%, 420px);
   z-index: 2;
 }
 
 .from-text {
-  font-size: 14px;
+  font-size: 13px;
   letter-spacing: 2px;
   font-weight: bold;
   color: #ff4d6d;
-  margin-bottom: 15px;
 }
 
 h1 {
   color: #ff4d6d;
-  margin-bottom: 30px;
+  margin: 20px 0;
 }
 
+/* Buttons */
 .buttons {
   position: relative;
   height: 140px;
 }
 
 button {
-  padding: 15px 35px;
+  padding: 14px 28px;
   font-size: 18px;
   border: none;
   border-radius: 40px;
@@ -68,81 +96,81 @@ button {
   position: absolute;
 }
 
-#yes {
-  background: #ff4d6d;
-  color: white;
-  left: 50%;
-  transform: translateX(-140%);
-}
+#yes { background: #ff4d6d; color: white; left: 50%; transform: translateX(-120%); }
+#no { background: #ddd; left: 50%; transform: translateX(10%); }
+#maybe { background: #ffd6e0; left: 50%; transform: translateX(-50%); top: 70px; }
 
-#no {
-  background: #ccc;
-  color: black;
-  left: 50%;
-  transform: translateX(10%);
-}
-
-#maybe {
-  background: #ffd6e0;
-  color: black;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 70px;
-}
-
-/* YES animation */
-@keyframes gentleYes {
-  0% { transform: translateX(-140%) scale(1); }
-  50% { transform: translateX(-140%) scale(1.15); }
-  100% { transform: translateX(-140%) scale(1); }
-}
-
-.force-yes {
-  animation: gentleYes 0.8s ease-in-out;
-}
-
-/* Image reveal */
-#imageBox {
+/* Envelope */
+#envelope {
+  width: 180px;
+  height: 120px;
+  margin: 20px auto;
+  position: relative;
+  cursor: pointer;
   display: none;
-  margin-top: 25px;
-  animation: fadeIn 1.5s ease forwards;
 }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
+.envelope-body { width: 100%; height: 100%; background: #ff4d6d; border-radius: 10px; position: absolute; }
+.envelope-flap {
+  width: 0; height: 0;
+  border-left: 90px solid transparent;
+  border-right: 90px solid transparent;
+  border-bottom: 60px solid #ff758f;
+  position: absolute; top: 0;
+  transform-origin: top;
+  transition: transform 1s;
 }
-
-#imageBox img {
-  max-width: 100%;
-  border-radius: 15px;
-  margin-top: 15px;
-}
-
-.reload {
-  margin-top: 20px;
-  background: #222;
+.open .envelope-flap { transform: rotateX(180deg); }
+.envelope-text {
+  position: absolute;
+  width: 100%;
+  top: 45px;
   color: white;
-  padding: 12px 25px;
+  font-weight: bold;
+}
+
+/* Final */
+#final { display: none; animation: fadeIn 1.5s forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+
+#final img { 
+  width: 100%; 
+  border-radius: 15px; 
+  margin-top: 15px; 
+  transform: translateY(100px); 
+  opacity: 0; 
+  transition: all 1s ease-out;
+}
+
+/* Buttons under image */
+#final .btn-container { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+.reload, .share {
+  padding: 12px 24px;
   border-radius: 30px;
+  border: none;
+  cursor: pointer;
+}
+.reload { background: #222; color: white; }
+.share { background: #25D366; color: white; }
+
+/* Mobile */
+@media (max-width: 480px) {
+  h1 { font-size: 22px; }
+  button { font-size: 16px; }
+  #final .btn-container { flex-direction: column; gap: 10px; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- Background Music -->
-<audio id="music" preload="auto" loop>
+<audio id="music" loop>
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
-<div class="container">
+<div class="container" id="card">
 
-  <div class="from-text">
-    FROM ALEXANDER TO YOU BABY GIRL ❤️
-  </div>
-
-  <h1>Will you be my Valentine? 💖</h1>
+  <div class="from-text">FROM ALEXANDER ❤️</div>
+  <h1 id="title">Will you be my Valentine? 💖</h1>
 
   <div class="buttons">
     <button id="yes">Yes 💘</button>
@@ -150,75 +178,123 @@ button {
     <button id="maybe">Maybe 😩</button>
   </div>
 
-  <div id="imageBox">
-    <h2>
-      You can’t escape love 😈❤️  
-      <br> PSYCH — so you want LOVE?  
-      <br> ALEXANDER GOT THIS FOR YOU 😂🫵
-    </h2>
-    <img src="gorilla.png" alt="Valentine">
-    <br>
-    <button class="reload" onclick="location.reload()">Try Again 🔄</button>
+  <div id="envelope">
+    <div class="envelope-flap"></div>
+    <div class="envelope-body"></div>
+    <div class="envelope-text">Click Me 💌</div>
   </div>
+
+  <div id="final">
+    <h2 id="finalText"></h2>
+    <img src="gorilla.jpg.jpeg" id="gorillaImg">
+    <div class="btn-container">
+      <button class="share" id="shareBtn">Share on WhatsApp 📲</button>
+      <button class="reload" onclick="location.reload()">Again 🔄</button>
+    </div>
+  </div>
+
 </div>
 
 <script>
-/* Floating hearts */
-function createHeart() {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.textContent = "💖";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 6000);
-}
-setInterval(createHeart, 300);
+document.addEventListener("DOMContentLoaded", () => {
+  const HER_NAME = "ABENA";
 
-/* YES button */
-const yesBtn = document.getElementById("yes");
-yesBtn.addEventListener("click", () => {
-  document.getElementById("imageBox").style.display = "block";
-  document.getElementById("music").play();
-  document.querySelector(".buttons").style.display = "none";
-});
+  /* Floating hearts & ribbons */
+  setInterval(() => {
+    const el = document.createElement("div");
+    el.className = "float";
+    el.textContent = Math.random() > 0.5 ? "💖" : "🎀";
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.fontSize = (18 + Math.random() * 14) + "px";
+    el.style.animationDuration = (4 + Math.random() * 3) + "s";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 7000);
+  }, 300);
 
-/* MAYBE button */
-const maybeBtn = document.getElementById("maybe");
-let maybeClicks = 0;
-
-maybeBtn.addEventListener("click", () => {
-  maybeClicks++;
-
-  if (maybeClicks === 1) {
-    maybeBtn.innerText = "Really? 😳 Think again";
-  } else if (maybeClicks === 2) {
-    maybeBtn.innerText = "Nahhh… pick YES 😏";
-  } else {
-    maybeBtn.style.display = "none";
+  /* Rose petals */
+  function petals() {
+    for (let i = 0; i < 40; i++) {
+      const p = document.createElement("div");
+      p.className = "petal";
+      p.style.left = Math.random() * 100 + "vw";
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 4000);
+    }
   }
-});
 
-/* NO button */
-const noBtn = document.getElementById("no");
-let noClicks = 0;
+  /* Buttons */
+  const yes = document.getElementById("yes");
+  const no = document.getElementById("no");
+  const maybe = document.getElementById("maybe");
+  const envelope = document.getElementById("envelope");
+  const final = document.getElementById("final");
+  const gorillaImg = document.getElementById("gorillaImg");
+  const music = document.getElementById("music");
+  const card = document.getElementById("card");
+  const title = document.getElementById("title");
+  const finalText = document.getElementById("finalText");
 
-noBtn.addEventListener("click", () => {
-  noClicks++;
+  let noClicks = 0, maybeClicks = 0;
 
-  if (noClicks === 1) {
-    noBtn.innerText = "Say yes 😌";
-  } else if (noClicks === 2) {
-    noBtn.innerText = "Please baby, yes 🥺";
-  } else {
-    noBtn.style.display = "none";
-    yesBtn.classList.add("force-yes");
+  /* YES button */
+  yes.onclick = () => {
+    document.querySelector(".buttons").style.display = "none";
+    envelope.style.display = "block";
+    music.play();
+    petals();
+  };
 
+  /* NO button */
+  no.onclick = () => {
+    noClicks++;
+    card.classList.add("shake");
+    setTimeout(() => card.classList.remove("shake"), 400);
+    const messages = [
+      `Really ${HER_NAME}? 😏`,
+      `Stop playing ${HER_NAME} 😂`,
+      `Nahhh you love me 😈`
+    ];
+    no.textContent = messages[Math.min(noClicks - 1, 2)];
+    if (noClicks >= 3) yes.click();
+  };
+
+  /* MAYBE button */
+  maybe.onclick = () => {
+    maybeClicks++;
+    title.textContent = maybeClicks === 1
+      ? `${HER_NAME}, don’t do this 😩`
+      : `You already know the answer 😏`;
+    if (maybeClicks > 1) maybe.style.display = "none";
+  };
+
+  /* Envelope open */
+  envelope.onclick = () => {
+    envelope.classList.add("open");
     setTimeout(() => {
-      yesBtn.click();
-      yesBtn.classList.remove("force-yes");
-    }, 800);
-  }
+      envelope.style.display = "none";
+      final.style.display = "block";
+      finalText.innerHTML = `So you want more gift? 😈❤️<br>${HER_NAME},PSYCH😂, ALEXANDER GOT THIS FOR YOU😂🫵. I LOVE YOU BTW`;
+
+      // Gorilla animation entrance
+      gorillaImg.style.transform = "translateY(100px)";
+      gorillaImg.style.opacity = 0;
+      setTimeout(() => {
+        gorillaImg.style.transform = "translateY(0)";
+        gorillaImg.style.opacity = 1;
+      }, 50);
+
+      petals();
+    }, 1000);
+  };
+
+  /* WhatsApp Share */
+  document.getElementById("shareBtn").onclick = () => {
+    const msg = `😂❤️ I just got trapped into being Alexander's Valentine!`;
+    window.open(
+      `https://wa.me/233537889150?text=${encodeURIComponent(msg)}`,
+      "_blank"
+    );
+  };
 });
 </script>
 
