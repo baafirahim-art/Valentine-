@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BE MY VALENTINE ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+/* Floating hearts */
+.heart {
+  position: fixed;
+  bottom: -10px;
+  font-size: 20px;
+  animation: floatUp linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-110vh); opacity: 0; }
+}
+
+/* Main box */
+.container {
+  background: white;
+  padding: 35px 40px 40px;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  max-width: 90%;
+  z-index: 2;
+}
+
+.from-text {
+  font-size: 14px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  color: #ff4d6d;
+  margin-bottom: 15px;
+}
+
+h1 {
+  color: #ff4d6d;
+  margin-bottom: 30px;
+}
+
+.buttons {
+  position: relative;
+  height: 140px;
+}
+
+button {
+  padding: 15px 35px;
+  font-size: 18px;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  position: absolute;
+}
+
+#yes {
+  background: #ff4d6d;
+  color: white;
+  left: 50%;
+  transform: translateX(-140%);
+}
+
+#no {
+  background: #ccc;
+  color: black;
+  left: 50%;
+  transform: translateX(10%);
+}
+
+#maybe {
+  background: #ffd6e0;
+  color: black;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 70px;
+}
+
+/* YES animation */
+@keyframes gentleYes {
+  0% { transform: translateX(-140%) scale(1); }
+  50% { transform: translateX(-140%) scale(1.15); }
+  100% { transform: translateX(-140%) scale(1); }
+}
+
+.force-yes {
+  animation: gentleYes 0.8s ease-in-out;
+}
+
+/* Image reveal */
+#imageBox {
+  display: none;
+  margin-top: 25px;
+  animation: fadeIn 1.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+#imageBox img {
+  max-width: 100%;
+  border-radius: 15px;
+  margin-top: 15px;
+}
+
+.reload {
+  margin-top: 20px;
+  background: #222;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 30px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Background Music -->
+<audio id="music" preload="auto" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+
+  <div class="from-text">
+    FROM ALEXANDER TO YOU BABY GIRL ❤️
+  </div>
+
+  <h1>Will you be my Valentine? 💖</h1>
+
+  <div class="buttons">
+    <button id="yes">Yes 💘</button>
+    <button id="no">No 💔</button>
+    <button id="maybe">Maybe 😩</button>
+  </div>
+
+  <div id="imageBox">
+    <h2>
+      You can’t escape love 😈❤️  
+      <br> PSYCH — so you want LOVE?  
+      <br> ALEXANDER GOT THIS FOR YOU 😂🫵
+    </h2>
+    <img src="gorilla.jpg.jpeg" alt="Valentine">
+    <br>
+    <button class="reload" onclick="location.reload()">Try Again 🔄</button>
+  </div>
+</div>
+
+<script>
+/* Floating hearts */
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.textContent = "💖";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}
+setInterval(createHeart, 300);
+
+/* YES button */
+const yesBtn = document.getElementById("yes");
+yesBtn.addEventListener("click", () => {
+  document.getElementById("imageBox").style.display = "block";
+  document.getElementById("music").play();
+  document.querySelector(".buttons").style.display = "none";
+});
+
+/* MAYBE button */
+const maybeBtn = document.getElementById("maybe");
+let maybeClicks = 0;
+
+maybeBtn.addEventListener("click", () => {
+  maybeClicks++;
+
+  if (maybeClicks === 1) {
+    maybeBtn.innerText = "Really? 😳 Think again";
+  } else if (maybeClicks === 2) {
+    maybeBtn.innerText = "Nahhh… pick YES 😏";
+  } else {
+    maybeBtn.style.display = "none";
+  }
+});
+
+/* NO button */
+const noBtn = document.getElementById("no");
+let noClicks = 0;
+
+noBtn.addEventListener("click", () => {
+  noClicks++;
+
+  if (noClicks === 1) {
+    noBtn.innerText = "Say yes 😌";
+  } else if (noClicks === 2) {
+    noBtn.innerText = "Please baby, yes 🥺";
+  } else {
+    noBtn.style.display = "none";
+    yesBtn.classList.add("force-yes");
+
+    setTimeout(() => {
+      yesBtn.click();
+      yesBtn.classList.remove("force-yes");
+    }, 800);
+  }
+});
+</script>
+
+</body>
+</html>
